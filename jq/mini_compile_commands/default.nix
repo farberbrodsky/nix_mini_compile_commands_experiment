@@ -29,7 +29,7 @@ rec {
         cc = old.cc.overrideAttrs (final: previous: {
           installPhase = previous.installPhase or "" + cc-hook;
         });
-        extraBuildInputs = old.extraBuildInputs or [] ++ [ package ];
+        extraNativeBuildInputs = old.extraNativeBuildInputs or [] ++ [ package ];
         allowedRequisites = null;
       });
 

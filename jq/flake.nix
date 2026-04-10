@@ -3,7 +3,7 @@
 
   inputs = {
     parent.url = ./..;
-    mini-compile-commands = { url = "github:danielbarter/mini_compile_commands"; flake = false; };
+    mini-compile-commands = { url = ./mini_compile_commands/default.nix; flake = false; };
   };
 
   outputs = { parent, mini-compile-commands, ... }:
@@ -17,8 +17,6 @@
               stdenv = mcc.wrap pkgs.stdenv;
             }).overrideAttrs (finalAttrs: previousAttrs: {
               buildInputs = (previousAttrs.buildInputs or []) ++ [ mcc.hook ];
-              # BUG: WHY WAS THIS NEEDED?
-              nativeBuildInputs = (previousAttrs.nativeBuildInputs or []) ++ [ mcc.package ];
             });
           }
       );
