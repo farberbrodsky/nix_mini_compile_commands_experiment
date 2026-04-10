@@ -11,8 +11,12 @@
       packages = parent.inputs.nixpkgs.lib.flip builtins.mapAttrs parent.inputs.nixpkgs.legacyPackages (_system: pkgs:
         let
           mcc = (pkgs.callPackage mini-compile-commands {});
+          # lib = parent.inputs.nixpkgs.lib;
         in
           {
+            clang-with-indexer = pkgs.llvmPackages.clang-unwrapped.overrideAttrs (finalAttrs: previousAttrs: {
+              ninjaFlags = (assert (!builtins.hasAttr "ninjaFlags" previousAttrs || previousAttrs.ninjaFlags == []); ["clangd-indexer"]);
+            });
             default = (pkgs.jq.override {
               stdenv = mcc.wrap pkgs.stdenv;
             }).overrideAttrs (finalAttrs: previousAttrs: {
